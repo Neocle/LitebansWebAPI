@@ -29,9 +29,12 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     }
 
     @Override
-    public LitebansWebAPIImpl getInstance() {
-        return instance;
-    }
+    public LitebansWebAPI getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("LitebansWebAPI is not initialized");
+        }
+        return (LitebansWebAPI) instance;
+    }    
 
     @Override
     public boolean addPlayerToWhitelist(String username) {
