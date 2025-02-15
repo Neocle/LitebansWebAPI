@@ -9,18 +9,18 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class LitebansWebAPIImpl implements LitebansWebAPI {
-    private static LitebansWebAPIImpl instance;
     private static Path configFile;
     private static Logger logger;
     private final PlayersWhitelist playersWhitelist;
     private final DiscordWhitelist discordWhitelist;
-
+    private LitebansWebAPI instance;
+    
     private LitebansWebAPIImpl() {
         this.playersWhitelist = new PlayersWhitelist(configFile, logger);
         this.discordWhitelist = new DiscordWhitelist(configFile, logger);
     }
 
-    public static void initialize(Path configFile, Logger logger) {
+    public synchronized void initialize(Path configFile, Logger logger) {
         if (instance == null) {
             LitebansWebAPIImpl.configFile = configFile;
             LitebansWebAPIImpl.logger = logger;
@@ -33,8 +33,8 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
         if (instance == null) {
             throw new IllegalStateException("LitebansWebAPI is not initialized");
         }
-        return (LitebansWebAPI) instance;
-    }    
+        return instance;
+    }
 
     @Override
     public boolean addPlayerToWhitelist(String username) {
@@ -62,13 +62,13 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     }
 
     @Override
-    public boolean addUserToWhitelist(String username) {
-        return discordWhitelist.addUser(username);
+    public boolean addUserToWhitelist(String userId) {
+        return discordWhitelist.addUser(userId);
     }
 
     @Override
-    public boolean removeUserFromWhitelist(String username) {
-        return discordWhitelist.removeUser(username);
+    public boolean removeUserFromWhitelist(String userId) {
+        return discordWhitelist.removeUser(userId);
     }
 
     @Override
@@ -77,8 +77,8 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     }
 
     @Override
-    public boolean isUserWhitelisted(String username) {
-        return discordWhitelist.isUserWhitelisted(username);
+    public boolean isUserWhitelisted(String userId) {
+        return discordWhitelist.isUserWhitelisted(userId);
     }
     
     @Override
