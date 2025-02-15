@@ -2,7 +2,16 @@ package fr.neocle.litebansweb.api;
 
 import java.util.List;
 
+import fr.neocle.litebansweb.api.impl.LitebansWebAPIImpl;
+import fr.neocle.litebansweb.api.whitelist.DiscordWhitelist;
+import fr.neocle.litebansweb.api.whitelist.PlayersWhitelist;
+
 public interface LitebansWebAPI {
+
+    LitebansWebAPIImpl getInstance();
+
+    PlayersWhitelist getPlayersWhitelist();
+    DiscordWhitelist getDiscordWhitelist();
     /**
      * Adds a player to the whitelist.
      * @param username name of the player
@@ -56,5 +65,4 @@ public interface LitebansWebAPI {
      * @return true if the user is whitelisted, false otherwise
      */
     boolean isUserWhitelisted(String userId);
-
 }

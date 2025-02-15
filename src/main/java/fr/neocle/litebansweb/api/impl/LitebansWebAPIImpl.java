@@ -9,13 +9,28 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class LitebansWebAPIImpl implements LitebansWebAPI {
-
+    private static LitebansWebAPIImpl instance;
+    private static Path configFile;
+    private static Logger logger;
     private final PlayersWhitelist playersWhitelist;
     private final DiscordWhitelist discordWhitelist;
 
-    public LitebansWebAPIImpl(Path configFile, Logger logger) {
+    private LitebansWebAPIImpl() {
         this.playersWhitelist = new PlayersWhitelist(configFile, logger);
         this.discordWhitelist = new DiscordWhitelist(configFile, logger);
+    }
+
+    public static void initialize(Path configFile, Logger logger) {
+        if (instance == null) {
+            LitebansWebAPIImpl.configFile = configFile;
+            LitebansWebAPIImpl.logger = logger;
+            instance = new LitebansWebAPIImpl();
+        }
+    }
+
+    @Override
+    public LitebansWebAPIImpl getInstance() {
+        return instance;
     }
 
     @Override
@@ -39,6 +54,11 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     }
 
     @Override
+    public PlayersWhitelist getPlayersWhitelist() {
+        return playersWhitelist;
+    }
+
+    @Override
     public boolean addUserToWhitelist(String username) {
         return discordWhitelist.addUser(username);
     }
@@ -56,6 +76,11 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     @Override
     public boolean isUserWhitelisted(String username) {
         return discordWhitelist.isUserWhitelisted(username);
+    }
+    
+    @Override
+    public DiscordWhitelist getDiscordWhitelist() {
+        return discordWhitelist;
     }
 
 }
