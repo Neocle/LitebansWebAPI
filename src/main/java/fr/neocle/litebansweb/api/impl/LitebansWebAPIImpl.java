@@ -13,14 +13,14 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
     private static Logger logger;
     private final PlayersWhitelist playersWhitelist;
     private final DiscordWhitelist discordWhitelist;
-    private LitebansWebAPI instance;
-    
+    private static LitebansWebAPI instance;
+
     private LitebansWebAPIImpl() {
         this.playersWhitelist = new PlayersWhitelist(configFile, logger);
         this.discordWhitelist = new DiscordWhitelist(configFile, logger);
     }
 
-    public synchronized void initialize(Path configFile, Logger logger) {
+    public static synchronized void initialize(Path configFile, Logger logger) {
         if (instance == null) {
             LitebansWebAPIImpl.configFile = configFile;
             LitebansWebAPIImpl.logger = logger;
@@ -28,8 +28,7 @@ public class LitebansWebAPIImpl implements LitebansWebAPI {
         }
     }
 
-    @Override
-    public LitebansWebAPI getInstance() {
+    public static LitebansWebAPI getSingletonInstance() {
         if (instance == null) {
             throw new IllegalStateException("LitebansWebAPI is not initialized");
         }

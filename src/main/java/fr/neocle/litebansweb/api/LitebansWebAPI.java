@@ -6,9 +6,11 @@ import fr.neocle.litebansweb.api.impl.LitebansWebAPIImpl;
 import fr.neocle.litebansweb.api.whitelist.DiscordWhitelist;
 import fr.neocle.litebansweb.api.whitelist.PlayersWhitelist;
 
-public interface LitebansWebAPI {
+public interface LitebansWebAPI {    
 
-    LitebansWebAPI getInstance();
+    static LitebansWebAPI getInstance() {
+        return LitebansWebAPIImpl.getSingletonInstance();
+    }
 
     PlayersWhitelist getPlayersWhitelist();
     DiscordWhitelist getDiscordWhitelist();
