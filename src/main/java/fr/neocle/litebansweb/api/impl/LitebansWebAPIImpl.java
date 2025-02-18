@@ -11,19 +11,21 @@ import java.util.logging.Logger;
 public class LitebansWebAPIImpl implements LitebansWebAPI {
     private static Path configFile;
     private static Logger logger;
+    private static Object platformInstance;
     private final PlayersWhitelist playersWhitelist;
     private final DiscordWhitelist discordWhitelist;
     private static LitebansWebAPI instance;
 
     private LitebansWebAPIImpl() {
-        this.playersWhitelist = new PlayersWhitelist(configFile, logger);
-        this.discordWhitelist = new DiscordWhitelist(configFile, logger);
+        this.playersWhitelist = new PlayersWhitelist(configFile, logger, platformInstance);
+        this.discordWhitelist = new DiscordWhitelist(configFile, logger, platformInstance);
     }
 
-    public static synchronized void initialize(Path configFile, Logger logger) {
+    public static synchronized void initialize(Path configFile, Logger logger, Object platformInstance) {
         if (instance == null) {
             LitebansWebAPIImpl.configFile = configFile;
             LitebansWebAPIImpl.logger = logger;
+            LitebansWebAPIImpl.platformInstance = platformInstance;
             instance = new LitebansWebAPIImpl();
         }
     }

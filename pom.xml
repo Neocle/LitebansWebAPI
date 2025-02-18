@@ -5,13 +5,38 @@
 
     <groupId>fr.neocle.litebansweb</groupId>
     <artifactId>LitebansWebAPI</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.10</version>
     <packaging>jar</packaging>
 
     <name>LitebansWebAPI</name>
     <description>Developer API for LitebansWeb</description>
 
+    <repositories>
+        <repository>
+            <id>papermc</id>
+            <url>https://repo.papermc.io/repository/maven-public/</url>
+        </repository>
+    </repositories>
+        
     <dependencies>
+        <dependency>
+            <groupId>com.velocitypowered</groupId>
+            <artifactId>velocity-api</artifactId>
+            <version>3.3.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.md-5</groupId>
+            <artifactId>bungeecord-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.papermc.paper</groupId>
+            <artifactId>paper-api</artifactId>
+            <version>1.21-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>org.yaml</groupId>
             <artifactId>snakeyaml</artifactId>
@@ -22,6 +47,13 @@
             <artifactId>snakeyaml-engine</artifactId>
             <version>2.2</version>
         </dependency>
+
+        <dependency>
+            <groupId>fr.neocle</groupId>
+            <artifactId>LitebansWebPlatforms</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
     </dependencies>
 
     <build>

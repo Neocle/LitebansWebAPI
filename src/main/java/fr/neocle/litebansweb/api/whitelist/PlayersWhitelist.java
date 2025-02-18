@@ -20,7 +20,7 @@ public class PlayersWhitelist {
     private final Logger logger;
     private final Yaml yaml;
 
-    public PlayersWhitelist(Path configFile, Logger logger) {
+    public PlayersWhitelist(Path configFile, Logger logger, Object platformInstance) {
         this.configFile = configFile;
         this.logger = logger;
         LoaderOptions loaderOptions = new LoaderOptions();
@@ -37,7 +37,9 @@ public class PlayersWhitelist {
      * @return true if added, false if already exists
      */
     public boolean addPlayer(String playerName) {
-        return modifyWhitelist(playerName, true);
+        boolean added = modifyWhitelist(playerName, true);
+        
+        return added;
     }
 
     /**
@@ -47,7 +49,9 @@ public class PlayersWhitelist {
      * @return true if removed, false if not found
      */
     public boolean removePlayer(String playerName) {
-        return modifyWhitelist(playerName, false);
+        boolean removed = modifyWhitelist(playerName, false);
+
+        return removed;
     }
 
     /**

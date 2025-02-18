@@ -8,12 +8,29 @@ import fr.neocle.litebansweb.api.whitelist.PlayersWhitelist;
 
 public interface LitebansWebAPI {    
 
+    /**
+     * Gets the singleton instance of the LitebansWeb API.
+     *
+     * @return The instance of LitebansWebAPI.
+     */
     static LitebansWebAPI getInstance() {
         return LitebansWebAPIImpl.getSingletonInstance();
     }
 
+    /**
+     * Retrieves the players whitelist.
+     *
+     * @return The PlayersWhitelist instance.
+     */
     PlayersWhitelist getPlayersWhitelist();
+
+    /**
+     * Retrieves the Discord whitelist.
+     *
+     * @return The DiscordWhitelist instance.
+     */
     DiscordWhitelist getDiscordWhitelist();
+    
     /**
      * Adds a player to the whitelist.
      * @param username name of the player

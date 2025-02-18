@@ -1,11 +1,17 @@
 package fr.neocle.litebansweb.api.whitelist;
 
+import org.bukkit.Bukkit;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.LoaderOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 import org.yaml.snakeyaml.nodes.*;
 import org.yaml.snakeyaml.representer.Representer;
+
+import com.velocitypowered.api.proxy.ProxyServer;
+
+import fr.neocle.litebansweb.velocity.api.events.VelocityUserWhitelistedEvent;
+import net.md_5.bungee.api.plugin.Plugin;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -17,11 +23,13 @@ import java.util.stream.Collectors;
 public class DiscordWhitelist {
     private final Path configFile;
     private final Logger logger;
+    private final Object platformInstance;
     private final Yaml yaml;
 
-    public DiscordWhitelist(Path configFile, Logger logger) {
+    public DiscordWhitelist(Path configFile, Logger logger, Object platformInstance) {
         this.configFile = configFile;
         this.logger = logger;
+        this.platformInstance = platformInstance;
         LoaderOptions loaderOptions = new LoaderOptions();
         loaderOptions.setProcessComments(true);
         DumperOptions dumperOptions = new DumperOptions();
@@ -30,19 +38,35 @@ public class DiscordWhitelist {
     }
 
     public synchronized boolean addUser(String userId) {
-        if (!isValidDiscordId(userId)) {
-            return false;
+        if (!isValidDiscordId(userId)) return false;
+
+        boolean added = modifyWhitelist(userId, true);
+
+        if (added) {
+            fireUserWhitelistedEvent(userId);
         }
 
-        return modifyWhitelist(userId, true);
+        return added;
     }
 
     public synchronized boolean removeUser(String userId) {
-        if (!isValidDiscordId(userId)) {
-            return false;
-        }
+        if (!isValidDiscordId(userId)) return false;
 
-        return modifyWhitelist(userId, false);
+        boolean removed = modifyWhitelist(userId, false);
+
+        return removed;
+    }
+
+    private void fireUserWhitelistedEvent(String userId) {
+        if (platformInstance instanceof ProxyServer velocity) {
+            velocity.getEventManager().fire(new VelocityUserWhitelistedEvent(userId));
+        } else {
+            return;
+        } /*else if (platformInstance instanceof Plugin bungee) {
+            bungee.getProxy().getPluginManager().callEvent(new BungeeUserWhitelistedEvent(userId));
+        } else if (platformInstance instanceof org.bukkit.plugin.Plugin bukkit) {
+            Bukkit.getPluginManager().callEvent(new BukkitUserWhitelistedEvent(userId));
+        }*/
     }
 
     public List<String> getWhitelistedUsers() {
