@@ -18,11 +18,13 @@ import java.util.stream.Collectors;
 public class PlayersWhitelist {
     private final Path configFile;
     private final Logger logger;
+    private final Object platformInstance;
     private final Yaml yaml;
 
     public PlayersWhitelist(Path configFile, Logger logger, Object platformInstance) {
         this.configFile = configFile;
         this.logger = logger;
+        this.platformInstance = platformInstance;
         LoaderOptions loaderOptions = new LoaderOptions();
         loaderOptions.setProcessComments(true);
         DumperOptions dumperOptions = new DumperOptions();

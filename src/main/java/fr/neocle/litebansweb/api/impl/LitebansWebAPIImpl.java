@@ -3,6 +3,7 @@ package fr.neocle.litebansweb.api.impl;
 import fr.neocle.litebansweb.api.LitebansWebAPI;
 import fr.neocle.litebansweb.api.whitelist.DiscordWhitelist;
 import fr.neocle.litebansweb.api.whitelist.PlayersWhitelist;
+import fr.neocle.litebansweb.api.events.EventDispatcher;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -11,21 +12,21 @@ import java.util.logging.Logger;
 public class LitebansWebAPIImpl implements LitebansWebAPI {
     private static Path configFile;
     private static Logger logger;
-    private static Object platformInstance;
+    private static EventDispatcher eventDispatcher;
     private final PlayersWhitelist playersWhitelist;
     private final DiscordWhitelist discordWhitelist;
     private static LitebansWebAPI instance;
 
     private LitebansWebAPIImpl() {
-        this.playersWhitelist = new PlayersWhitelist(configFile, logger, platformInstance);
-        this.discordWhitelist = new DiscordWhitelist(configFile, logger, platformInstance);
+        this.playersWhitelist = new PlayersWhitelist(configFile, logger, eventDispatcher);
+        this.discordWhitelist = new DiscordWhitelist(configFile, logger, eventDispatcher);
     }
 
-    public static synchronized void initialize(Path configFile, Logger logger, Object platformInstance) {
+    public static synchronized void initialize(Path configFile, Logger logger, EventDispatcher eventDispatcher) {
         if (instance == null) {
             LitebansWebAPIImpl.configFile = configFile;
             LitebansWebAPIImpl.logger = logger;
-            LitebansWebAPIImpl.platformInstance = platformInstance;
+            LitebansWebAPIImpl.eventDispatcher = eventDispatcher;
             instance = new LitebansWebAPIImpl();
         }
     }
